@@ -18,7 +18,7 @@ Backend service for the ShowTracker application.
 
 ## Setup
 
-## 1. Clone repository
+ 1. Clone repository
 
 git clone https://github.com/14-harish/showtracker-backend.git
 cd showtracker-backend
