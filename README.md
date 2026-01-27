@@ -38,8 +38,10 @@ JWT_SECRET=your_secret_key
 
 5. Run server
 uvicorn app.main:app --reload
+
 Server runs at:
 http://127.0.0.1:8000
+
 API docs:
 http://127.0.0.1:8000/docs
 
