@@ -8,6 +8,7 @@ export default function PosterModal({ item, onClose, onLocalUpdate }) {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
+  // Fetch details
   useEffect(() => {
     const endpoint =
       item.media_type === "movie"
@@ -29,13 +30,14 @@ export default function PosterModal({ item, onClose, onLocalUpdate }) {
       .finally(() => setLoading(false));
   }, [item]);
 
-  // ESC close
+  // ESC to close
   useEffect(() => {
     const esc = (e) => e.key === "Escape" && onClose();
     window.addEventListener("keydown", esc);
     return () => window.removeEventListener("keydown", esc);
   }, [onClose]);
 
+  // -------- MOVIES --------
   async function saveMovie(status) {
     if (!details) return;
     setSaving(true);
@@ -51,7 +53,8 @@ export default function PosterModal({ item, onClose, onLocalUpdate }) {
       }),
     });
 
-    onLocalUpdate({
+    // ✅ SAFE call
+    onLocalUpdate?.({
       media_type: "movie",
       id: item.id,
       newStatus: status,
@@ -65,7 +68,7 @@ export default function PosterModal({ item, onClose, onLocalUpdate }) {
     setSaving(true);
     await apiFetch(`/movies/${item.id}`, { method: "DELETE" });
 
-    onLocalUpdate({
+    onLocalUpdate?.({
       media_type: "movie",
       id: item.id,
       newStatus: null,
@@ -75,6 +78,7 @@ export default function PosterModal({ item, onClose, onLocalUpdate }) {
     onClose();
   }
 
+  // -------- TV SHOWS --------
   async function saveTV(status, s = null, e = null) {
     if (!details) return;
     setSaving(true);
@@ -92,7 +96,7 @@ export default function PosterModal({ item, onClose, onLocalUpdate }) {
       }),
     });
 
-    onLocalUpdate({
+    onLocalUpdate?.({
       media_type: "tv",
       id: item.id,
       newStatus: status,
@@ -106,7 +110,7 @@ export default function PosterModal({ item, onClose, onLocalUpdate }) {
     setSaving(true);
     await apiFetch(`/tv/${item.id}`, { method: "DELETE" });
 
-    onLocalUpdate({
+    onLocalUpdate?.({
       media_type: "tv",
       id: item.id,
       newStatus: null,
@@ -116,6 +120,7 @@ export default function PosterModal({ item, onClose, onLocalUpdate }) {
     onClose();
   }
 
+  // -------- LOADING --------
   if (loading || !details) {
     return (
       <div className="fixed inset-0 bg-black/90 flex items-center justify-center">
@@ -124,6 +129,7 @@ export default function PosterModal({ item, onClose, onLocalUpdate }) {
     );
   }
 
+  // -------- UI --------
   return (
     <div
       className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4"
@@ -165,7 +171,7 @@ export default function PosterModal({ item, onClose, onLocalUpdate }) {
               {details.overview}
             </p>
 
-            {/* 🎬 MOVIE ACTIONS */}
+            {/* 🎬 MOVIES */}
             {item.media_type === "movie" && (
               <div className="flex flex-wrap gap-3">
                 <button
@@ -194,7 +200,7 @@ export default function PosterModal({ item, onClose, onLocalUpdate }) {
               </div>
             )}
 
-            {/* 📺 TV ACTIONS */}
+            {/* 📺 TV */}
             {item.media_type === "tv" && (
               <>
                 <div className="flex flex-wrap gap-3 mb-4">
